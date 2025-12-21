@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Romance for Mish</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body { box-sizing: border-box; transition: background 1.2s ease; }
+
+    /* Mood Colors Variables */
+    :root {
+      --bg-1: #fce7f3;
+      --bg-2: #ddd6fe;
+      --accent: #ec4899;
+      --text: #6b21a8;
+    }
+
+    /* Animations */
+    @keyframes float {0%,100%{transform:translateY(0);}50%{transform:translateY(-20px);}}
+    @keyframes pulse {0%,100%{transform:scale(1);}50%{transform:scale(1.05);}}
+    @keyframes footerFloat {0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);}}
+    @keyframes sparkleFade {0%{transform:scale(1) translateY(0);opacity:.9;}100%{transform:scale(0) translateY(-20px);opacity:0;}}
+    @keyframes fall {0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(100vh) rotate(360deg);opacity:0;}}
+
+    /* Core Classes */
+    .floating { animation: float 3s ease-in-out infinite; }
+    .pulse-slow { animation: pulse 2s ease-in-out infinite; }
+    .gradient-text { background: linear-gradient(135deg,var(--accent),#8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .card-hover { transition: all 0.3s ease; }
+    .card-hover:hover { transform: translateY(-5px); box-shadow:0 20px 40px rgba(236,72,153,.3);}
+    .upload-zone { border:2px dashed #ec4899; transition:.3s; cursor:pointer;}
+    .upload-zone:hover { border-color:#8b5cf6; background: rgba(236,72,153,.05);}
+    #footer { animation: footerFloat 4s ease-in-out infinite; transition: all 0.7s; }
+    #footer:hover { transform: scale(1.05); }
+
+    /* Mood classes */
+    .mood-soft { --bg-1:#fdf2f8; --bg-2:#fae8ff; --accent:#f472b6; }
+    .mood-bright { --bg-1:#fff7ed; --bg-2:#ffedd5; --accent:#fb7185; }
+    .mood-evening { --bg-1:#fde68a; --bg-2:#fbcfe8; --accent:#ec4899; }
+    .mood-night { --bg-1:#1e1b4b; --bg-2:#312e81; --accent:#c7d2fe; color:#e0e7ff; }
+    .mood-happy { animation: pulse 1.5s ease-in-out infinite; }
+
+    /* Sparkle */
+    .sparkle { position: fixed; pointer-events:none; width:8px;height:8px;border-radius:50%;opacity:0.8; animation:sparkleFade 1s ease-out forwards; z-index:9999;}
+
+    /* Falling Emojis */
+    .falling-emoji { position: fixed; top: -50px; pointer-events:none; animation-name: fall; animation-timing-function: linear; animation-iteration-count: 1; z-index:9998; }
+  </style>
+</head>
+
+<body class="min-h-full overflow-auto" style="background: linear-gradient(135deg,var(--bg-1),var(--bg-2));">
+
+  <!-- HEADER -->
+  <header class="text-center py-10 px-4">
+    <div class="floating inline-block mb-4">❤️</div>
+    <h1 class="text-5xl font-bold gradient-text mb-3">Romance for Mish</h1>
+    <p class="text-xl text-purple-700 mb-2">A special place created with love</p>
+    <p class="text-sm text-purple-600"><strong>Created by:</strong> Roy 💕 <strong>For:</strong> Mish</p>
+  </header>
+
+  <!-- MAIN -->
+  <main class="max-w-4xl mx-auto px-4 pb-16 space-y-10">
+
+    <!-- Mood Music -->
+    <section class="bg-white rounded-3xl p-6 shadow-xl text-center">
+      <h2 class="text-2xl font-bold text-purple-800 mb-3">Mood Music</h2>
+      <p class="text-sm text-purple-600 mb-4">Music changes with the mood ✨</p>
+      <iframe id="spotifyPlayer" style="border-radius:12px" src="" width="100%" height="152" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+    </section>
+
+    <!-- UPLOADS -->
+    <section class="bg-white rounded-3xl p-8 shadow-xl card-hover">
+      <h2 class="text-3xl font-bold text-purple-800 mb-6 text-center">Share Your Memories</h2>
+      <div class="grid md:grid-cols-2 gap-6">
+
+        <!-- IMAGES -->
+        <div>
+          <label class="font-semibold text-purple-700">Photos</label>
+          <div class="upload-zone rounded-2xl p-6 text-center" onclick="imageInput.click()">
+            <p class="text-purple-600">Click to upload images</p>
+          </div>
+          <input id="imageInput" type="file" accept="image/*" multiple hidden>
+        </div>
+
+        <!-- VIDEOS -->
+        <div>
+          <label class="font-semibold text-purple-700">Videos</label>
+          <div class="upload-zone rounded-2xl p-6 text-center" onclick="videoInput.click()">
+            <p class="text-purple-600">Click to upload videos</p>
+          </div>
+          <input id="videoInput" type="file" accept="video/*" multiple hidden>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- GALLERY -->
+    <section class="bg-white rounded-3xl p-8 shadow-xl">
+      <h2 class="text-3xl font-bold text-purple-800 mb-6 text-center">Memory Gallery</h2>
+      <div id="gallery" class="grid sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
+    </section>
+
+    <!-- NOTES -->
+    <section class="bg-white rounded-3xl p-8 shadow-xl">
+      <h2 class="text-3xl font-bold text-purple-800 mb-4 text-center">Love Notes</h2>
+      <textarea id="noteText" class="w-full border rounded-xl p-3 mb-4" placeholder="Write a memory or message..."></textarea>
+      <button onclick="addNote()" class="px-6 py-2 bg-pink-500 text-white rounded-xl pulse-slow">Add Note</button>
+      <div id="notes" class="mt-6 space-y-3"></div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer id="footer" class="text-center py-6 text-sm">
+    <span id="footerText">Created and designed by <span class="font-semibold">Roy</span> to <span class="font-semibold">Mish</span> 💖</span>
+    <div class="opacity-70 mt-1">© <span id="year"></span></div>
+  </footer>
+
+  <script>
+    // --- MEMORY STORAGE ---
+    function saveToMemory(key, data) { localStorage.setItem(key, JSON.stringify(data)); }
+    function loadFromMemory(key, fallback = []) { return JSON.parse(localStorage.getItem(key)) || fallback; }
+    let savedImages = loadFromMemory("romance_images");
+    let savedVideos = loadFromMemory("romance_videos");
+    let savedNotes = loadFromMemory("romance_notes");
+
+    const gallery = document.getElementById("gallery");
+    const notes = document.getElementById("notes");
+    const body = document.body;
+    const noteText = document.getElementById("noteText");
+    const spotifyPlayer = document.getElementById("spotifyPlayer");
+
+    // --- SPARKLE ---
+    let sparkleColor = "#ec4899";
+    function updateSparkleColor(mood) {
+      if (mood==="soft") sparkleColor="#f472b6";
+      if (mood==="bright") sparkleColor="#fb7185";
+      if (mood==="evening") sparkleColor="#a855f7";
+      if (mood==="night") sparkleColor="#c7d2fe";
+      if (mood==="happy") sparkleColor="#ec4899";
+    }
+    function createSparkle(x,y){
+      const s=document.createElement("div"); s.className="sparkle"; s.style.left=x+"px"; s.style.top=y+"px"; s.style.background=sparkleColor; document.body.appendChild(s);
+      setTimeout(()=>s.remove(),1000);
+    }
+    document.addEventListener("mousemove",e=>{ if(Math.random()>0.85) createSparkle(e.clientX,e.clientY); });
+    document.addEventListener("touchmove",e=>{ const t=e.touches[0]; if(t && Math.random()>0.7) createSparkle(t.clientX,t.clientY); });
+
+    // --- FALLING EMOJIS ---
+    const moodEmojis = {
+      soft: ["🌸","💐","🌷"],
+      bright: ["☀️","🌈","🌟"],
+      evening: ["🌆","🌙","✨"],
+      night: ["🌌","🌠","🌙"],
+      happy: ["💖","🎉","🥰"]
+    };
+    function createFallingEmoji(){
+      const emojis = moodEmojis[currentMood] || ["💖"];
+      const emoji = emojis[Math.floor(Math.random()*emojis.length)];
+      const span = document.createElement("span");
+      span.textContent = emoji;
+      span.className = "falling-emoji";
+      span.style.left = Math.random()*window.innerWidth+"px";
+      span.style.fontSize = 16 + Math.random()*24 + "px";
+      span.style.animationDuration = 3 + Math.random()*3 + "s";
+      document.body.appendChild(span);
+      setTimeout(()=>span.remove(), parseFloat(span.style.animationDuration)*1000);
+    }
+    setInterval(()=>{ if(Math.random()>0.6) createFallingEmoji(); },1000);
+
+    // --- FOOTER ---
+    const footerYear=document.getElementById("year");
+    footerYear.textContent = new Date().getFullYear();
+    function updateFooterColor(mood){
+      const footer=document.getElementById("footer");
+      footer.className="text-center py-6 text-sm transition-all duration-700";
+      if(mood==="soft") footer.classList.add("text-pink-500");
+      if(mood==="bright") footer.classList.add("text-rose-500");
+      if(mood==="evening") footer.classList.add("text-purple-600");
+      if(mood==="night") footer.classList.add("text-indigo-300");
+      if(mood==="happy") footer.classList.add("text-pink-400");
+    }
+
+    // --- SPOTIFY ---
+    const moodPlaylists = {
+      soft:"37i9dQZF1DX7gIoKXt0gmx",
+      bright:"37i9dQZF1DXdPec7aLTmlC",
+      evening:"37i9dQZF1DX4sWSpwq3LiO",
+      night:"37i9dQZF1DX4E3UdUs7fUx",
+      happy:"37i9dQZF1DX9XIFQuFvzM4"
+    };
+    let currentMood="";
+
+    function loadSpotify(mood){ if(currentMood===mood) return; currentMood=mood; spotifyPlayer.src=`https://open.spotify.com/embed/playlist/${moodPlaylists[mood]}?utm_source=generator`; }
+
+    function setMoodByTime(){
+      const hour=new Date().getHours(); body.className=body.className.replace(/mood-\w+/g,"");
+      if(hour>=5 && hour<11){ body.classList.add("mood-soft"); loadSpotify("soft"); updateFooterColor("soft"); updateSparkleColor("soft"); currentMood="soft"; }
+      else if(hour>=11 && hour<17){ body.classList.add("mood-bright"); loadSpotify("bright"); updateFooterColor("bright"); updateSparkleColor("bright"); currentMood="bright"; }
+      else if(hour>=17 && hour<21){ body.classList.add("mood-evening"); loadSpotify("evening"); updateFooterColor("evening"); updateSparkleColor("evening"); currentMood="evening"; }
+      else{ body.classList.add("mood-night"); loadSpotify("night"); updateFooterColor("night"); updateSparkleColor("night"); currentMood="night"; }
+    }
+
+    function happyMoment(){
+      body.classList.add("mood-happy"); loadSpotify("happy"); updateFooterColor("happy"); updateSparkleColor("happy"); currentMood="happy";
+      setTimeout(()=>body.classList.remove("mood-happy"),3000);
+    }
+
+    // --- MEMORY RESTORE ---
+    function restoreMemory(){
+      savedImages.forEach(src=>{ const img=document.createElement("img"); img.src=src; img.className="rounded-xl shadow card-hover"; gallery.appendChild(img); });
+      savedVideos.forEach(src=>{ const video=document.createElement("video"); video.src=src; video.controls=true; video.className="rounded-xl shadow card-hover"; gallery.appendChild(video); });
+      savedNotes.forEach(text=>{ const div=document.createElement("div"); div.className="bg-pink-100 p-3 rounded-xl"; div.textContent=text; notes.appendChild(div); });
+    }
+    restoreMemory();
+
+    // --- IMAGE UPLOAD ---
+    const imageInput=document.getElementById("imageInput");
+    imageInput.onchange=e=>{
+      [...e.target.files].forEach(file=>{
+        const reader=new FileReader();
+        reader.onload=()=>{
+          savedImages.push(reader.result); saveToMemory("romance_images",savedImages);
+          const img=document.createElement("img"); img.src=reader.result; img.className="rounded-xl shadow card-hover"; gallery.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+      });
+      happyMoment();
+    };
+
+    // --- VIDEO UPLOAD ---
+    const videoInput=document.getElementById("videoInput");
+    videoInput.onchange=e=>{
+      [...e.target.files].forEach(file=>{
+        const reader=new FileReader();
+        reader.onload=()=>{
+          savedVideos.push(reader.result); saveToMemory("romance_videos",savedVideos);
+          const video=document.createElement("video"); video.src=reader.result; video.controls=true; video.className="rounded-xl shadow card-hover"; gallery.appendChild(video);
+        };
+        reader.readAsDataURL(file);
+      });
+      happyMoment();
+    };
+
+    // --- NOTES ---
+    function addNote(){
+      if(!noteText.value.trim()) return;
+      savedNotes.push(noteText.value); saveToMemory("romance_notes",savedNotes);
+      const div=document.createElement("div"); div.className="bg-pink-100 p-3 rounded-xl"; div.textContent=noteText.value; notes.appendChild(div);
+      noteText.value=""; happyMoment();
+    }
+
+    // --- INITIALIZE ---
+    setMoodByTime();
+    setInterval(setMoodByTime,60000);
+  </script>
+</body>
+    </html>
+    
