@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Michelle</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #e0f7fa, #f1f8e9);
+      text-align: center;
+      padding: 30px;
+      color: #333;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 25px;
+      max-width: 500px;
+      margin: auto;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+    }
+    h1 {
+      color: #2e7d32;
+    }
+    p {
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    .quote {
+      margin-top: 20px;
+      font-style: italic;
+      color: #555;
+    }
+    footer {
+      margin-top: 30px;
+      font-size: 13px;
+      color: #777;
+    }
+    select {
+      padding: 8px;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+    #photo-wall img {
+      width: 100px;
+      margin: 5px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h1>Michelle 👋</h1>
+    <p>
+      This is just a small friendly page to say thank you for being a good friend.
+      I respect you, and I wish you nothing but good things and positive days ahead.
+    </p>
+
+    <div class="quote">
+      “Be kind whenever possible. It is always possible.”
+    </div>
+
+    <footer>
+      Made with good intentions 😊
+    </footer>
+  </div>
+
+  <div class="card">
+    <h3>Daily Check-In</h3>
+    <select id="mood">
+      <option>🙂 Feeling okay</option>
+      <option>😌 Calm</option>
+      <option>😄 Happy</option>
+      <option>😐 Neutral</option>
+    </select>
+    <p id="result"></p>
+    <script>
+      document.getElementById("mood").onchange = function () {
+        document.getElementById("result").innerText =
+          "Thanks for checking in. Take care today 🌱";
+      };
+    </script>
+  </div>
+
+  <div class="card">
+    <h3>Photo Wall</h3>
+    <div id="photo-wall">
+      <img src="https://via.placeholder.com/100" alt="Photo 1">
+      <img src="https://via.placeholder.com/100" alt="Photo 2">
+      <img src="https://via.placeholder.com/100" alt="Photo 3">
+    </div>
+  </div>
+
+</body>
+</html>
